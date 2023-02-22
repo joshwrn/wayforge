@@ -1,3 +1,5 @@
+import type { FC, ReactNode } from "react"
+
 import type { SerializedStyles } from "@emotion/react"
 import { css } from "@emotion/react"
 import corners, { chamfer } from "corners"
@@ -16,5 +18,10 @@ export const cssCard = (colorA: Luum, _: Luum): SerializedStyles => css`
   height: ${CARD_HEIGHT + CARD_PADDING * 2}px;
   position: relative;
 `
+export const Card: FC<{ colorA: Luum; colorB: Luum; children: ReactNode }> = ({
+  colorA,
+  colorB,
+  children,
+}) => <data css={cssCard(colorA, colorB)}>{children}</data>
 
 export const rightSlant = corners(null, chamfer)

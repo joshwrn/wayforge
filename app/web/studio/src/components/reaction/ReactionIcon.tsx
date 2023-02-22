@@ -57,14 +57,12 @@ export const ReactionIcon_INTERNAL: FC<{
   const energy = useRecoilValue(findReactionEnergyState(reaction.id))
   const colorA = Luum.fromJSON(energy.colorA)
   const colorB = Luum.fromJSON(energy.colorB)
-  const energyPresentHex = colorB.tint(10).hex
-  const energyAbsentHex = colorB.shade(10).hex
-  const doesProduceEnergy = reaction.products.some(
-    (product) => product.id === energy.id
-  )
-  const doesConsumeEnergy = reaction.reagents.some(
-    (reagent) => reagent.id === energy.id
-  )
+  const consumesAmount =
+    reaction.reagents.find(({ id }) => id === energy.id)?.amount ?? 0
+  const producesAmount =
+    reaction.products.find(({ id }) => id === energy.id)?.amount ?? 0
+  const getColor = (amount: number) =>
+    amount > 0 ? colorB.tint(5 * amount).hex : colorB.shade(10).hex
   const navigate = useNavigate()
 
   return (
@@ -97,9 +95,9 @@ export const ReactionIcon_INTERNAL: FC<{
               cornerSize: 5,
               noClipping: true,
               below: {
-                color: doesConsumeEnergy ? energyPresentHex : energyAbsentHex,
+                color: getColor(consumesAmount),
                 stroke: {
-                  color: energyAbsentHex,
+                  color: getColor(0),
                   width: 1,
                 },
               },
@@ -119,7 +117,7 @@ export const ReactionIcon_INTERNAL: FC<{
           ),
         }}
       />
-      <SvgArrow fillHex={colorA.hex} strokeHex={energyPresentHex} />
+      <SvgArrow fillHex={colorA.hex} strokeHex={getColor(consumesAmount)} />
       <ListItems
         findState={findEnergyState}
         labels={reaction.products}
@@ -129,9 +127,9 @@ export const ReactionIcon_INTERNAL: FC<{
             corners(null, null, null, null).options({
               noClipping: true,
               below: {
-                color: doesProduceEnergy ? energyPresentHex : energyAbsentHex,
+                color: getColor(producesAmount),
                 stroke: {
-                  color: energyAbsentHex,
+                  color: getColor(0),
                   width: 1,
                 },
               },

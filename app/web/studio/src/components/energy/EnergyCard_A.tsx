@@ -8,7 +8,7 @@ import { Luum } from "~/packages/Luum/src"
 
 import { SVG_EnergyIcon } from "./EnergyIcon"
 import { findEnergyState } from "../../services/energy"
-import { CARD_HEIGHT, CARD_WIDTH, cssCard } from "../Card"
+import { Card, CARD_HEIGHT, CARD_PADDING, CARD_WIDTH, cssCard } from "../Card"
 
 export const Data_EnergyCard_A: FC<{ energyId: string }> = ({ energyId }) => {
   const domId = useId()
@@ -18,7 +18,7 @@ export const Data_EnergyCard_A: FC<{ energyId: string }> = ({ energyId }) => {
   const colorB = Luum.fromJSON(energy.colorB)
 
   return (
-    <data css={cssCard(colorA, colorB)}>
+    <Card colorA={colorA} colorB={colorB}>
       <article
         css={css`
           display: flex;
@@ -50,7 +50,7 @@ export const Data_EnergyCard_A: FC<{ energyId: string }> = ({ energyId }) => {
               align-items: center;
               color: ${colorB.hex};
               ~ div {
-                border-top: 1px solid ${colorA.shade(5).hex};
+                border-top: 1px solid ${colorA.shade(10).hex};
               }
             }
           }
@@ -67,6 +67,6 @@ export const Data_EnergyCard_A: FC<{ energyId: string }> = ({ energyId }) => {
             ))}
         </main>
       </article>
-    </data>
+    </Card>
   )
 }
