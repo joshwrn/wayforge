@@ -6,22 +6,22 @@ import corners, { chamfer } from "corners"
 
 import type { Luum } from "~/packages/Luum/src"
 
-export const CARD_WIDTH = 252
-export const CARD_HEIGHT = 360
-export const CARD_PADDING = 12
+export const CARD_WIDTH = 180
+export const CARD_HEIGHT = 252
+export const CARD_PADDING = 3
 
 export const cssCard = (colorA: Luum, _: Luum): SerializedStyles => css`
   background: ${colorA.hex};
   font-family: "Uruz";
-  font-size: 10.8px;
-  width: ${CARD_WIDTH + CARD_PADDING * 2}px;
-  height: ${CARD_HEIGHT + CARD_PADDING * 2}px;
+  font-size: 10.8pt;
+  width: ${CARD_WIDTH + CARD_PADDING * 2}pt;
+  height: ${CARD_HEIGHT + CARD_PADDING * 2}pt;
   position: relative;
 `
 export const Card: FC<{ colorA: Luum; colorB: Luum; children: ReactNode }> = ({
   colorA,
   colorB,
   children,
-}) => <data css={cssCard(colorA, colorB)}>{children}</data>
+}) => <div css={cssCard(colorA, colorB)}>{children}</div>
 
 export const rightSlant = corners(null, chamfer)

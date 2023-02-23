@@ -23,7 +23,7 @@ import {
   findReactionWithRelationsState,
   useRemoveReaction,
 } from "../../services/reaction"
-import { SVG_EnergyIcon } from "../energy/EnergyIcon"
+import { EnergyIcon } from "../energy/EnergyIcon"
 import { skeletalJsonEditorCss } from "../styles/skeletalJsonEditorCss"
 
 export const energySelectState = selector<{ value: string; text: string }[]>({
@@ -156,7 +156,7 @@ export const ReactionEditor: FC<
               ${skeletalJsonEditorCss}
             `}
           />
-          <SVG_EnergyIcon energyId={reagentId} size={40} />
+          <EnergyIcon energyId={reagentId} size={40} />
         </span>
       ))}
       <select onChange={(e) => add.reagent(e.target.value)}>
@@ -189,7 +189,7 @@ export const ReactionEditor: FC<
               ${skeletalJsonEditorCss}
             `}
           />
-          <SVG_EnergyIcon energyId={productId} size={40} />
+          <EnergyIcon energyId={productId} size={40} />
         </span>
       ))}
       <select
@@ -211,7 +211,7 @@ export const ReactionEditor: FC<
       <div>
         {reaction.featureOf ? (
           <span>
-            <SVG_EnergyIcon energyId={reaction.featureOf.id} size={40} />
+            <EnergyIcon energyId={reaction.featureOf.id} size={40} />
             <button onClick={() => set.featureOf(null)}>remove</button>
           </span>
         ) : (

@@ -15,6 +15,9 @@ import type { Amount } from "../../services/energy_reaction"
 export const SvgTSpan_Spacer: FC = () => (
   <tspan fill="none" stroke="none" style={{ userSelect: `none` }}>{`-`}</tspan>
 )
+export const Spacer: FC = () => (
+  <span style={{ userSelect: `none`, color: `none` }}>{`-`}</span>
+)
 
 export const EnergyIcon_INTERNAL: FC<{
   energy: Energy
@@ -28,54 +31,51 @@ export const EnergyIcon_INTERNAL: FC<{
   const navigate = useNavigate()
 
   return (
-    <svg
+    <div
       css={css`
         width: ${size}px;
         height: ${size}px;
-        paint-order: stroke fill;
-        display: inline;
-        cursor: pointer;
+        display: flex;
+        flex-grow: 0;
+        cursor: ${clickable ? `pointer` : `default`};
+        b,
+        i {
+          font-family: Uruz;
+          white-space: nowrap;
+        }
+        b {
+          width: 100%;
+          height: 100%;
+          /* clip-path: circle(${size / 2}px at center); */
+          position: relative;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+          border: 1px #0f0 solid;
+        }
+        i {
+          font-style: normal;
+        }
       `}
       onClick={clickable ? () => navigate(`/energy/${energy.id}`) : undefined}
     >
-      <clipPath id={`${domId}-clip`}>
-        <circle cx={middle} cy={middle} r={size} />
-      </clipPath>
-      <text
-        textAnchor="middle"
-        x={middle}
-        y={middle + size * 0.25}
-        clipPath={`url(#${domId}-clip)`}
-        css={css`
-          font-family: "Uruz";
-          font-size: ${size}px;
-          fill: ${colorB.hex};
-        `}
-      >
-        <SvgTSpan_Spacer />
-        {` MT `}
-        <SvgTSpan_Spacer />
-      </text>
-      <text
-        textAnchor="middle"
-        x={middle}
-        y={middle + size * 0.25}
-        clipPath={`url(#${domId}-clip)`}
-        css={css`
-          font-family: "Uruz";
-          font-size: ${size}px;
-          fill: ${colorA.hex};
-        `}
-      >
-        <SvgTSpan_Spacer />
-        {` ${energy.icon} `}
-        <SvgTSpan_Spacer />
-      </text>
-    </svg>
+      <b>
+        <span>_Meat</span>
+      </b>
+      <i>
+        <span
+          css={css`
+            color: ${colorA.hex};
+          `}
+        >
+          _{energy.name}
+        </span>
+      </i>
+    </div>
   )
 }
 
-export const SVG_EnergyIcon: FC<{
+export const EnergyIcon: FC<{
   energyId: string
   size: number
   clickable?: boolean
@@ -87,9 +87,9 @@ export const SVG_EnergyIcon: FC<{
 }
 
 export const VOID: Energy = {
-  id: `VOID`,
+  id: `MEAT`,
   icon: ``,
-  name: `Void`,
+  name: `Meat`,
   colorA: {
     hue: 0,
     sat: 0,
@@ -142,7 +142,7 @@ export const EnergyAmountTag: FC<{
         justify-content: baseline;
       `}
     >
-      <SVG_EnergyIcon energyId={energyId} size={size} clickable={clickable} />
+      <EnergyIcon energyId={energyId} size={size} clickable={clickable} />
       <span
         css={css`
           background-color: black;
@@ -185,7 +185,7 @@ export const Span_EnergyAmount: FC<
         Array(amount)
           .fill(null)
           .map((_, i) => (
-            <SVG_EnergyIcon
+            <EnergyIcon
               key={domId + `-icon-` + i}
               energyId={id}
               size={size}

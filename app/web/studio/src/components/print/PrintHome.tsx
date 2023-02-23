@@ -6,10 +6,12 @@ import html2pdf from "html2pdf.js"
 import { useRecoilValue } from "recoil"
 
 import type { WC } from "~/packages/hamr/src/react-json-editor"
+import { Repeater } from "~/packages/hamr/src/react-repeater"
 
 import { energyIndex } from "../../services/energy"
 import { useSetTitle } from "../../services/view"
 import { Data_EnergyCard_A } from "../energy/EnergyCard_A"
+import { Data_EnergyCard_B } from "../energy/EnergyCard_B"
 
 const worker = html2pdf().set({
   margin: 0,
@@ -29,33 +31,12 @@ export const Page: WC = ({ children }) => {
         css={css`
           height: 612pt;
           width: 792pt;
-          padding: 36pt;
+          padding: 24pt;
           background: white;
           flex-shrink: 0;
           flex-flow: column;
-          marks {
-            /* display: flex; */
-            display: block;
-            height: 10pt;
-            width: 100%;
-            /* justify-content: space-between; */
-            div {
-              background: black;
-              width: 1pt;
-              ~ div {
-                margin-left: 72pt;
-              }
-            }
-          }
         `}
       >
-        <marks is="div">
-          {Array(10)
-            .fill(0)
-            .map((_, i) => (
-              <div key={domId + `bar` + i + 1} />
-            ))}
-        </marks>
         {children}
       </section>
       <button onClick={savePage}>save</button>
@@ -63,17 +44,34 @@ export const Page: WC = ({ children }) => {
   )
 }
 
+export const CardPrint: FC = () => {
+  const energyIds = useRecoilValue(energyIndex)
+  console.log({ energyIds })
+
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+      `}
+    >
+      <Repeater count={8}>
+        <Data_EnergyCard_B energyId={[...energyIds][0]} />
+      </Repeater>
+    </div>
+  )
+}
+
 export const PrintHome: FC = () => {
   useSetTitle(`Print`)
 
-  const energyIds = useRecoilValue(energyIndex)
-  console.log({ energyIds })
   return (
-    <>
-      <Page>
-        <Data_EnergyCard_A energyId={[...energyIds][4]} />
-      </Page>
-      <Data_EnergyCard_A energyId={[...energyIds][4]} />
-    </>
+    <Page>
+      <CardPrint />
+    </Page>
   )
 }
