@@ -9915,9 +9915,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "shrine@workspace:app/web/shrine"
   dependencies:
+    immer: 9.0.19
     phaser: 3.55.2
     vite: 4.2.0
     vite-tsconfig-paths: 4.0.7
+    zustand: 4.3.6
   languageName: unknown
   linkType: soft
 
