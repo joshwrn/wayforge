@@ -6274,6 +6274,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"immer@npm:9.0.21":
+  version: 9.0.21
+  resolution: "immer@npm:9.0.21"
+  checksum: 70e3c274165995352f6936695f0ef4723c52c92c92dd0e9afdfe008175af39fa28e76aafb3a2ca9d57d1fb8f796efc4dd1e1cc36f18d33fa5b74f3dfb0375432
+  languageName: node
+  linkType: hard
+
 "immutable@npm:^4.0.0":
   version: 4.3.0
   resolution: "immutable@npm:4.3.0"
@@ -8362,6 +8369,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:3.3.6":
+  version: 3.3.6
+  resolution: "nanoid@npm:3.3.6"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 7d0eda657002738aa5206107bd0580aead6c95c460ef1bdd0b1a87a9c7ae6277ac2e9b945306aaa5b32c6dcb7feaf462d0f552e7f8b5718abfc6ead5c94a71b3
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:4.0.1":
   version: 4.0.1
   resolution: "nanoid@npm:4.0.1"
@@ -8697,7 +8713,9 @@ __metadata:
   resolution: "obscurity@workspace:packages/obscurity"
   dependencies:
     fp-ts: 2.13.1
+    immer: 9.0.21
     io-ts: 2.2.20
+    nanoid: 3.3.6
     tsup: 6.7.0
     vite: 4.2.0
     vite-tsconfig-paths: 4.0.7
