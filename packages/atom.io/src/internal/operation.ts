@@ -4,7 +4,7 @@ import type { Atom, ReadonlySelector, Selector } from "."
 import type { Store } from "./store"
 import { IMPLICIT } from "./store"
 
-export const startAction = (store: Store): void => {
+export const startOperation = (store: Store): void => {
   store.operation = {
     open: true,
     done: new Set(),
@@ -12,7 +12,7 @@ export const startAction = (store: Store): void => {
   }
   store.config.logger?.info(`☐`, `operation start`)
 }
-export const finishAction = (store: Store): void => {
+export const finishOperation = (store: Store): void => {
   store.operation = { open: false }
   store.config.logger?.info(`☑️`, `operation done`)
 }

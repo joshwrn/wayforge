@@ -1,10 +1,10 @@
 import {
   IMPLICIT,
   configure,
-  finishAction,
+  finishOperation,
   getState__INTERNAL,
   setState__INTERNAL,
-  startAction,
+  startOperation,
   withdraw,
 } from "./internal"
 import * as __INTERNAL__ from "./internal"
@@ -43,9 +43,9 @@ export const setState = <T, New extends T>(
   value: New | ((oldValue: T) => New),
   store: Store = IMPLICIT.STORE
 ): void => {
-  startAction(store)
+  startOperation(store)
   setState__INTERNAL(state, value, store)
-  finishAction(store)
+  finishOperation(store)
 }
 
 export type Observe<T> = (change: { newValue: T; oldValue: T }) => void

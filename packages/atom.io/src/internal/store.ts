@@ -30,7 +30,7 @@ export interface Store {
     | {
         open: true
         route: string[]
-        paths: string[][]
+        paths: Record<string, { notDone: string[][]; done: string[][] }>
       }
   transaction:
     | {

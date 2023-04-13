@@ -141,13 +141,13 @@ export const registerSelector = (
 ): Transactors => ({
   get: (state) => {
     const isRegistered = store.selectorGraph
-      .getRelatedIds(selectorKey)
-      .includes(state.key)
+      .getRelations(selectorKey)
+      .some((relation) => relation.source === state.key)
     if (isRegistered) {
       store.config.logger?.info(`   ||`, selectorKey, `<-`, state.key)
     } else {
       store.config.logger?.info(
-        `🔌 registerSelector`,
+        `🔌 registerSelector (GET)`,
         selectorKey,
         `<-`,
         state.key
@@ -161,7 +161,22 @@ export const registerSelector = (
     return currentValue
   },
   set: (token, newValue) => {
-    store.selectorGraph.set(token.key, selectorKey, { source: selectorKey })
+    // const isRegistered = store.selectorGraph
+    //   .getRelations(token.key)
+    //   .some((relation) => relation.source === selectorKey)
+    // if (isRegistered) {
+    //   store.config.logger?.info(`   ||`, token.key, `->`, selectorKey)
+    // } else {
+    //   store.config.logger?.info(
+    //     `🔌 registerSelector (SET)`,
+    //     selectorKey,
+    //     `->`,
+    //     token.key
+    //   )
+    //   store.selectorGraph = store.selectorGraph.set(token.key, selectorKey, {
+    //     source: selectorKey,
+    //   })
+    // }
     setState__INTERNAL(token, newValue, store)
   },
 })
