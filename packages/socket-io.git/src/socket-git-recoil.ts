@@ -1,23 +1,16 @@
 import type { RecoilValueReadOnly } from "recoil"
 import { atom, selector } from "recoil"
-import type { Socket } from "socket.io-client"
 
 import { recordToEntries } from "~/packages/anvl/src/object/entries"
 import type { Transact } from "~/packages/hamr/src/recoil-tools/recoil-transaction-tools"
 
+import type { GitClientSocket } from "./client"
 import { DEFAULT_SIMPLE_GIT_RETURN_VALUES } from "./defaults"
-import type {
-  GitInterface,
-  GitClientEvents,
-  GitServerEvents,
-  GitSocketError,
-} from "./interface"
+import type { GitInterface, GitSocketError } from "./interface"
 
 export * from "./interface"
 
-export type GitClientSocket = Socket<GitServerEvents, GitClientEvents>
-
-export type GitClientTools = {
+export type GitRecoilTools = {
   [GitFunction in keyof GitInterface]: GitInterface[GitFunction] extends (
     ...args: any[]
   ) => any
@@ -36,8 +29,8 @@ export type GitClientTools = {
 export const capitalize = (str: string): string =>
   str[0].toUpperCase() + str.slice(1)
 
-export const initGitClientTools = (socket: GitClientSocket): GitClientTools => {
-  const completeInterface = {} as GitClientTools
+export const initGitRecoilTools = (socket: GitClientSocket): GitRecoilTools => {
+  const completeInterface = {} as GitRecoilTools
 
   const makeClientInterface = (key: keyof GitInterface) => {
     const state_INTERNAL = atom<GitSocketError | any>({

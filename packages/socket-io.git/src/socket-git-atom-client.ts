@@ -49,17 +49,17 @@ export const initGitAtomicTools = (socket: GitClientSocket): GitClientTools => {
         },
       ],
     })
-    const getInternalState: A_IO.Read<() => any> = ({ get }) =>
+    const getCurrentState: A_IO.Read<() => any> = ({ get }) =>
       get(state_INTERNAL)
     const clientInterface = Object.assign(
       (...args: Parameters<GitInterface[keyof GitInterface]>) =>
         socket.emit(key, ...args),
       {
+        getCurrentState,
         state: A_IO.selector({
           key: `git${capitalize(key)}`,
           get: ({ get }) => get(state_INTERNAL),
         }),
-        getCurrentState: getInternalState,
       }
     )
     return clientInterface
