@@ -1,8 +1,16 @@
+import crypto from "node:crypto"
+
 import dotenv from "dotenv"
 import { pipe } from "fp-ts/function"
-import { current } from "immer"
+import type { Socket } from "socket.io"
 import { Server as WebSocketServer } from "socket.io"
 
+import { Join } from "~/packages/anvl/src/join"
+import type {
+  AtomToken,
+  ReadonlySelectorToken,
+  SelectorToken,
+} from "~/packages/atom.io/src"
 import {
   getState,
   runTransaction,
@@ -11,6 +19,7 @@ import {
   subscribe,
 } from "~/packages/atom.io/src"
 import type { TransactionUpdate } from "~/packages/atom.io/src/internal"
+import { attachMetaState } from "~/packages/atom.io/src/internal/meta/attach-meta"
 
 import { logger } from "./logger"
 import {
@@ -24,7 +33,21 @@ import {
 
 // setLogLevel(`info`)
 
-const record: Record<string, string> = {}
+const { atomTokenIndexState, selectorTokenIndexState } = attachMetaState()
+
+const emitState = <T>(
+  socket: Socket,
+  token: AtomToken<T> | ReadonlySelectorToken<T> | SelectorToken<T>
+) => {
+  const currentValue = getState(token)
+  if (currentValue instanceof Set) {
+    socket.emit(`atom`, token, [...currentValue])
+  } else if (currentValue instanceof Join) {
+    socket.emit(`atom`, token, currentValue.toJSON())
+  } else {
+    socket.emit(`atom`, token, currentValue)
+  }
+}
 
 subscribe(playersInRoomsState, ({ newValue, oldValue }) => {
   logger.info(`playersInRoomsState`, `oldValue`, oldValue.toJSON().relations)
@@ -44,10 +67,11 @@ pipe(
       socket.emit(`set:roomsIndex`, [...getState(roomsIndex)])
       logger.info(socket.id, `connected`)
       io.emit(`connection`)
-      setState(
-        playersIndex,
-        (playersIndex) => new Set([...playersIndex, socket.id])
-      )
+      setState(playersIndex, (current) => {
+        const next = new Set([...current, socket.id])
+        logger.info(socket.id, `set:playersIndex`, { current, next })
+        return next
+      })
       const unsubRoomsIndex = subscribe(roomsIndex, ({ newValue }) => {
         socket.emit(`set:roomsIndex`, [...newValue])
       })
@@ -126,6 +150,37 @@ pipe(
             new Set([...playersIndex].filter((id) => id !== socket.id))
         )
         setState(playersInRoomsState, (current) => current.remove(socket.id))
+      })
+
+      // admin
+      socket.on(`auth:admin`, (password: string) => {
+        const salt = `811704560339545`
+        const hash = crypto.createHash(`sha256`)
+        hash.update(`${salt}${password}`)
+        const hashedPassword = hash.digest(`hex`)
+        logger.info(socket.id, `auth:admin`, hashedPassword)
+        if (
+          hashedPassword ===
+          `03ab11e7e41fefae9ca637f5e7cabbe946e6e6705c662e14902b8ef38c996f71`
+        ) {
+          logger.info(socket.id, `auth:admin`, `success`)
+          socket.emit(`auth:admin`, `success`)
+          const tokensAndFamilies = getState(atomTokenIndexState)
+          for (const tokenOrFamily of Object.values(tokensAndFamilies)) {
+            if (`familyMembers` in tokenOrFamily) {
+              for (const token of Object.values(tokenOrFamily.familyMembers)) {
+                emitState(socket, token)
+                subscribe(token, () => emitState(socket, token))
+              }
+            } else {
+              emitState(socket, tokenOrFamily)
+              subscribe(tokenOrFamily, () => emitState(socket, tokenOrFamily))
+            }
+          }
+          subscribe(atomTokenIndexState, ({ newValue }) => {
+            socket.emit(`set:atomTokenIndex`, newValue)
+          })
+        }
       })
     })
   }
