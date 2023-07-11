@@ -22,6 +22,7 @@
   "workspaces": [
     "app/web/*",
     "app/node/*",
+    "app/qwik/*",
     "packages/*",
     "packages/@banka/*",
     "packages/@banka/eslint-config/react",
