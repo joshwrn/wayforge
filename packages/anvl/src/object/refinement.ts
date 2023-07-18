@@ -68,7 +68,9 @@ export const hasProperties = <OBJ extends object>(
 				allTrue,
 			),
 	}
-	return _[name]
+
+	// rome-ignore lint/style/noNonNullAssertion: this assignment was just made
+	return _[name]!
 }
 
 export const doesExtend =

@@ -14,11 +14,15 @@ export const ArrayEditor = <_ extends JsonArr>({
 	set,
 	Components,
 }: JsonEditorProps_INTERNAL<JsonArr>): ReactElement => {
-	const setElement = makeElementSetters(data, set)
+	const elementSetters = makeElementSetters(data, set)
 	return (
 		<>
 			{data.map((element, index) => {
 				const newPath = [...path, index]
+				const set = elementSetters[index]
+				if (set === undefined) {
+					throw new Error(`setElement is undefined`)
+				}
 				return (
 					<JsonEditor_INTERNAL
 						key={newPath.join(``)}
@@ -26,7 +30,7 @@ export const ArrayEditor = <_ extends JsonArr>({
 						isReadonly={isReadonly}
 						isHidden={isHidden}
 						data={element}
-						set={setElement[index]}
+						set={set}
 						Components={Components}
 					/>
 				)

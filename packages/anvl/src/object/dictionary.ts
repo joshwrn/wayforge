@@ -60,7 +60,9 @@ export class Dictionary<
 	): Name extends NameOfA
 		? { [K in NameOfB]: B | undefined }
 		: { [K in NameOfA]: A | undefined } {
-		const [name, value] = recordToEntries(item as { [K in Name]: A | B })[0]
+		const input = recordToEntries(item as { [K in Name]: A | B })[0]
+		if (!input) throw new Error(`No input`)
+		const [name, value] = input
 		const otherName = name === this.nameOfA ? this.nameOfB : this.nameOfA
 		const otherValue =
 			name === this.nameOfA ? this.aSide[value as A] : this.bSide[value as B]
@@ -89,7 +91,9 @@ export class Dictionary<
 			[K in Name]: Name extends NameOfA ? A : B
 		},
 	): Dictionary<A, B, NameOfA, NameOfB> {
-		const [name, value] = recordToEntries(item as { [K in Name]: A | B })[0]
+		const input = recordToEntries(item as { [K in Name]: A | B })[0]
+		if (!input) throw new Error(`No input`)
+		const [name, value] = input
 		if (name === this.nameOfA) {
 			const b = this.aSide[value as A]
 			delete this.aSide[value as A]

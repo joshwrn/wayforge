@@ -6,7 +6,30 @@ export const matchAdjacentPairs = <T, RETURN>(
 	for (let i = 0; i < items.length; i++) {
 		const itemB = items[i + 1] ?? items[0]
 		const itemA = items[i]
-		result.push(processor(itemA, itemB, i, i + 1, items))
+		// rome-ignore lint/style/noNonNullAssertion: this is safe and worth it
+		result.push(processor(itemA!, itemB!, i, i + 1, items))
+	}
+	return result
+}
+
+export const reduceAdjacentPairs = <T, RETURN>(
+	items: T[],
+	processor: (
+		accumulator: RETURN,
+		a: T,
+		b: T,
+		aIdx: number,
+		bIdx: number,
+		items: T[],
+	) => RETURN,
+	initialValue: RETURN,
+): RETURN => {
+	let result = initialValue
+	for (let i = 0; i < items.length; i++) {
+		const itemB = items[i + 1] ?? items[0]
+		const itemA = items[i]
+		// rome-ignore lint/style/noNonNullAssertion: this is safe and worth it
+		result = processor(result, itemA!, itemB!, i, i + 1, items)
 	}
 	return result
 }

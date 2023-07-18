@@ -64,7 +64,8 @@ export const couldBe = <A>(
 	const checkTypes: {
 		(input: unknown): input is A
 		or: <B>(isTypeB: Refinement<unknown, B>) => ExtendsSome<A, B>
-	} = Object.assign(_[name], {
+		// rome-ignore lint/style/noNonNullAssertion: this was just assigned
+	} = Object.assign(_[name]!, {
 		or: <B>(isTypeB: Refinement<unknown, B>): ExtendsSome<A, B> =>
 			couldBe(isTypeB, logging, [...refinements, isTypeB]),
 	})
@@ -105,7 +106,8 @@ export const mustBe = <A>(
 	const checkTypes: {
 		(input: unknown): input is A
 		and: <B>(isTypeB: Refinement<unknown, B>) => ExtendsAll<A, B>
-	} = Object.assign(_[name], {
+		// rome-ignore lint/style/noNonNullAssertion: this was just assigned
+	} = Object.assign(_[name]!, {
 		and: <B>(isTypeB: Refinement<unknown, B>): ExtendsAll<A, B> =>
 			mustBe(isTypeB, logging, [...refinements, isTypeB]) as ExtendsAll<A, B>,
 	})

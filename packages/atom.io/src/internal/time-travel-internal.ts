@@ -23,6 +23,12 @@ export const redo__INTERNAL = (
 	}
 	timelineData.timeTraveling = true
 	const update = timelineData.history[timelineData.at]
+	if (!update) {
+		store.config.logger?.error(
+			`Failed to redo on timeline "${token.key}". This timeline is corrupted.`,
+		)
+		return
+	}
 	switch (update.type) {
 		case `atom_update`: {
 			const { key, newValue } = update
@@ -67,6 +73,12 @@ export const undo__INTERNAL = (
 
 	--timelineData.at
 	const update = timelineData.history[timelineData.at]
+	if (!update) {
+		store.config.logger?.error(
+			`Failed to undo on timeline "${token.key}". This timeline is corrupted.`,
+		)
+		return
+	}
 	switch (update.type) {
 		case `atom_update`: {
 			const { key, oldValue } = update

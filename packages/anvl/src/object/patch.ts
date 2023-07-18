@@ -3,7 +3,9 @@ import { isPlainObject } from "./refinement"
 import { sprawl } from "./sprawl"
 
 export type Fragment<T> = Partial<{
-	[K in keyof T]: T[K] extends (infer Item)[]
+	[K in keyof T]: T[K] extends ReadonlyArray<infer Item>
+		? ReadonlyArray<Fragment<Item>>
+		: T[K] extends (infer Item)[]
 		? Fragment<Item>[]
 		: Fragment<Partial<T[K]>>
 }>

@@ -30,6 +30,9 @@ export const deepMob = <Tree extends Array<unknown> | object>(
 		oldChild: unknown,
 	): InspectionResult | void => {
 		const key = path[path.length - 1]
+		if (!key) {
+			throw new Error(`Tried to set a node with an empty path.`)
+		}
 		const newParent = getNewParentNode(path)
 		if (newParent instanceof Error) return
 		const newChild = Array.isArray(oldChild)

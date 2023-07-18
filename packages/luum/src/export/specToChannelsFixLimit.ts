@@ -18,14 +18,12 @@ import {
 } from "../solveFor"
 
 const minChannelsForSaturationFromHue = (hue: Degree) => {
-	const relativeChannels = hueToRelativeChannels(hue)
+	const [r, g, b] = hueToRelativeChannels(hue)
 	const channelSpreader = (trueSaturation: OutOf255): ChannelObject => {
-		const makeMinChannel = (idx: number) =>
-			Math.round(relativeChannels[idx] * trueSaturation)
 		return {
-			R: makeMinChannel(0),
-			G: makeMinChannel(1),
-			B: makeMinChannel(2),
+			R: Math.round(r * trueSaturation),
+			G: Math.round(g * trueSaturation),
+			B: Math.round(b * trueSaturation),
 		}
 	}
 	return channelSpreader

@@ -157,7 +157,7 @@ const Combo_INTERNAL = <State,>({
 				<button
 					type="button"
 					aria-label="Add"
-					onClick={() => (entry ? add(selected) : undefined)}
+					onClick={() => (entry && selected ? add(selected) : undefined)}
 					tabIndex={-1}
 					disabled={!enabled}
 				>

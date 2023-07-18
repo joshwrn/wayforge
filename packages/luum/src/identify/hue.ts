@@ -20,16 +20,10 @@ const rangeNames: NamingPoint[] = [
 ]
 
 const identifyHue = (hue: Degree): string => {
-	// console.log('||| hue', hue)
 	const hueWrapped = wrapInto(0, 360)(hue)
-	const { name } =
-		rangeNames.find(({ hue }) => hueWrapped >= hue) || rangeNames[0]
-	/*
-      console.log('||| hue', hue,
-        'is between', namingPointA.hue,
-        'and', namingPointB.hue,
-        'therefore it is named', namingPointA.name)
-      */
+	const namingPoint = rangeNames.find(({ hue }) => hueWrapped < hue)
+	if (!namingPoint) return `unknown`
+	const { name } = namingPoint
 	return name
 }
 

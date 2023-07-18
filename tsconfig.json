@@ -24,6 +24,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"strictNullChecks": true,
+		"noUncheckedIndexedAccess": true,
 		"useUnknownInCatchVariables": true,
 		"noUnusedParameters": true,
 		"skipLibCheck": true

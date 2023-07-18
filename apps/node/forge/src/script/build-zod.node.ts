@@ -19,7 +19,12 @@ Promise.all(
 		async ([, jsonSchema]) => await jsonSchemaToZodDereffed(jsonSchema),
 	),
 ).then((zodSchemas) =>
-	zodSchemas.forEach((schema, idx) =>
-		writeFileSync(`${process.cwd()}/gen/${schemaEntries[idx][0]}.ts`, schema),
-	),
+	zodSchemas.forEach((schema, idx) => {
+		const schemaEntry = schemaEntries[idx]
+		if (!schemaEntry) {
+			throw new Error(`No schema entry at index ${idx}`)
+		}
+		const [schemaName] = schemaEntry
+		return writeFileSync(`${process.cwd()}/gen/${schemaName}.ts`, schema)
+	}),
 )

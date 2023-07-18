@@ -5,7 +5,7 @@ import type { FC } from "react"
 import { Observer } from "./__util__/Observer"
 import { isDefault, atom } from "../src"
 
-export const onChange = [() => undefined, console.log][0]
+export const onChange = ([() => undefined, console.log] as const)[0]
 
 describe(`single atom`, () => {
 	const scenario = () => {
