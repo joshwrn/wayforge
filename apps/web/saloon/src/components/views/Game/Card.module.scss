@@ -1,0 +1,13 @@
+.class {
+  height: 120px;
+  width: 80px;
+  display: flex;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  svg:last-of-type {
+    height: 100% !important;
+    width: 100% !important;
+  }
+}
